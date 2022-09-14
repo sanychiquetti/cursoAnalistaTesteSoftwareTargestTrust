@@ -1,5 +1,6 @@
 package com.test;
 
+import static com.core.DriverFactory.getDriver;
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -9,34 +10,27 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class CalculadoraTest {
-	private WebDriver driver;
+import com.core.BaseTest;
+import com.core.DriverFactory;
+
+public class CalculadoraTest extends BaseTest {
 	private WebElement valor1;
 	private WebElement valor2;
 	private WebElement total;
 
 	@Before
 	public void setUp() throws Exception {
-		
-		//C:\\driver\\chromedriver.exe
-		System.setProperty("webdriver.chrome.driver",
-						   "C:\\Users\\Marel-Not\\Downloads\\PROGRAMAS_SOFTWARE\\chromedriver.exe");
-		
-		driver = new ChromeDriver();
-		driver.get("https://antoniotrindade.com.br/treinoautomacao/desafiosoma.html");
-		
-		valor1 = driver.findElement(By.id("number1"));
-		valor2 = driver.findElement(By.id("number2"));
-		total = driver.findElement(By.id("total"));
+	
+		getDriver().get("https://antoniotrindade.com.br/treinoautomacao/desafiosoma.html");
+		valor1 = getDriver().findElement(By.id("number1"));
+		valor2 = getDriver().findElement(By.id("number2"));
+		total = getDriver().findElement(By.id("total"));
 		
 	}
-
-	@After
-	public void tearDown() throws Exception {
-		driver.quit();
-	}
-
 	@Test
 	public void testSoma() throws InterruptedException {
 		
@@ -46,10 +40,12 @@ public class CalculadoraTest {
 		
 		
 		//mapeia o elemento somar 
-		WebElement somar = driver.findElement(By.id("somar"));
+		WebElement somar = getDriver().findElement(By.id("somar"));
 		somar.click();
 		
-		Thread.sleep(3000);
+	    //Espera por um texto no textField estar presente
+		WebDriverWait wait = new WebDriverWait(getDriver(), 5);
+		wait.until(ExpectedConditions.textToBePresentInElementValue(total, "13"));
 		
 		//validar resultado
 		assertEquals("13", total.getAttribute("value"));
@@ -63,16 +59,13 @@ public class CalculadoraTest {
 		valor1.sendKeys("5");
 		valor2.sendKeys("8");
 		
-		
 		//mapeia o elemento subtrair 
-		WebElement subtrair = driver.findElement(By.id("subtrair"));
+		WebElement subtrair = getDriver().findElement(By.id("subtrair"));
 		subtrair.click();
 		
 		//validar resultado
-		assertEquals("-3", total.getAttribute("value"));
-			
-	}
-	
+		assertEquals("-3", total.getAttribute("value"));	
+	}	
 	@Test
 	public void testMultiplicação() throws InterruptedException {
 		
@@ -81,14 +74,12 @@ public class CalculadoraTest {
 		valor2.sendKeys("8");
 		
 		//mapeia o elemento subtrair 
-		WebElement multiplicar = driver.findElement(By.id("multiplicar"));
+		WebElement multiplicar = getDriver().findElement(By.id("multiplicar"));
 		multiplicar.click();
 		
 		//validar resultado
-		assertEquals("40", total.getAttribute("value"));
-			
-	}
-	
+		assertEquals("40", total.getAttribute("value"));			
+	}	
 	@Test
 	public void testDividir() throws InterruptedException {
 		//interage com o elemento
@@ -96,14 +87,12 @@ public class CalculadoraTest {
 		valor2.sendKeys("2");
 		
 		//mapeia o elemento subtrair 
-		WebElement dividir = driver.findElement(By.id("dividir"));
+		WebElement dividir = getDriver().findElement(By.id("dividir"));
 		dividir.click();
 		
 		//validar resultado
-		assertEquals("5", total.getAttribute("value"));
-			
+		assertEquals("5", total.getAttribute("value"));			
 	}
-
 	@Test
 	public void testLimpar() throws InterruptedException {
 		
@@ -112,14 +101,14 @@ public class CalculadoraTest {
 		valor2.sendKeys("2");
 		
 		//mapeia o elemento subtrair 
-		WebElement dividir = driver.findElement(By.id("dividir"));
+		WebElement dividir = getDriver().findElement(By.id("dividir"));
 		dividir.click();
 				
 		//validar resultado
 		assertEquals("5", total.getAttribute("value"));
 		
 		//mapeia o elemento limpar a tela
-		WebElement limpar = driver.findElement(By.id("limpar"));
+		WebElement limpar = getDriver().findElement(By.id("limpar"));
 		limpar.click();
 		
 		//validar se escreveu no elemento

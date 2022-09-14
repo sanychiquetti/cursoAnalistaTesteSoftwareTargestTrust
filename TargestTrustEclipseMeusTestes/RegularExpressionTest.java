@@ -1,5 +1,6 @@
 package com.test;
 
+import static com.core.DriverFactory.getDriver;
 import static org.junit.Assert.*;
 
 import org.junit.After;
@@ -10,32 +11,25 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-public class RegularExpressionTest {
-	public WebDriver driver; 
+import com.core.BaseTest;
+import com.core.DriverFactory;
+
+public class RegularExpressionTest extends BaseTest {
 
 	@Before
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"C:\\Users\\Marel-Not\\Downloads\\PROGRAMAS_SOFTWARE\\chromedriver.exe" );
-		driver = new ChromeDriver();
-		driver.get("https://www.geradordecpf.org/");
-
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		driver.quit();
+		getDriver().get("https://www.geradordecpf.org/");
 	}
 	
 	@Test
 	public void testValidateCpfWithDot() {
-		WebElement cbPontos = driver.findElement(By.id("cbPontos"));
+		WebElement cbPontos = getDriver().findElement(By.id("cbPontos"));
 		cbPontos.click();
 	
-		WebElement btnGerar = driver.findElement(By.id("btn-gerar-cpf"));
+		WebElement btnGerar = getDriver().findElement(By.id("btn-gerar-cpf"));
 		btnGerar.click();
 	
-		WebElement tfCpf = driver.findElement(By.id("numero"));
+		WebElement tfCpf = getDriver().findElement(By.id("numero"));
 				
 		String cpfGerado = tfCpf.getAttribute("value");
 		
@@ -49,10 +43,10 @@ public class RegularExpressionTest {
 	@Test
 	public void testValidateCpfWithoutDot() {
 	
-		WebElement btnGerar = driver.findElement(By.id("btn-gerar-cpf"));
+		WebElement btnGerar = getDriver().findElement(By.id("btn-gerar-cpf"));
 		btnGerar.click();
 	
-		WebElement tfCpf = driver.findElement(By.id("numero"));
+		WebElement tfCpf = getDriver().findElement(By.id("numero"));
 				
 		String cpfGerado = tfCpf.getAttribute("value");
 		

@@ -1,6 +1,9 @@
 package com.test;
 
+import static com.core.DriverFactory.getDriver;
 import static org.junit.Assert.*;
+
+import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
@@ -9,37 +12,31 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class RegularExpression2Test {
-	public WebDriver driver; 
+import com.core.BaseTest;
+import com.core.DriverFactory;
+
+public class RegularExpression2Test extends BaseTest {
 
 	@Before
 	public void setUp() throws Exception {
-		System.setProperty("webdriver.chrome.driver",
-				"C:\\Users\\Marel-Not\\Downloads\\PROGRAMAS_SOFTWARE\\chromedriver.exe" );
-		driver = new ChromeDriver();
-		driver.get("https://www.4devs.com.br/gerador_de_cnpj");
-
+		getDriver().get("https://www.4devs.com.br/gerador_de_cnpj");
 	}
-
-	@After
-	public void tearDown() throws Exception {
-		driver.quit();
-	}
-
+	
 	@Test
-	public void testValidateCnphWithDot() throws InterruptedException {
-		
-		Thread.sleep(12000);
-		
-		WebElement btnGerar = driver.findElement(By.id("bt_gerar_cnpj"));
+	public void testValidateCnpjWithDot() throws InterruptedException {
+				
+		WebElement btnGerar = getDriver().findElement(By.id("bt_gerar_cnpj"));
 		btnGerar.click();
 		
-		Thread.sleep(1000);
-		WebElement tfGerado = driver.findElement(By.id("texto_cnpj"));
+		WebElement tfGerado = getDriver().findElement(By.id("texto_cnpj"));
+		
+		WebDriverWait wait = new WebDriverWait(getDriver(), 20);
+		wait.until(ExpectedConditions.invisibilityOfElementWithText(By.id("text_cnpj"), "Gerando..."));
 		
 		String cnpjGerado = tfGerado.getText();
-		
 	    System.out.println(cnpjGerado);
 	    	    
 		assertTrue(cnpjGerado.matches("^[0-9]{2}\\.[0-9]{3}\\.[0-9]{3}/[0-9]{4}-[0-9]{2}$"));
@@ -47,18 +44,16 @@ public class RegularExpression2Test {
 	 }
 
 	@Test
-	public void testValidateCnphWithoutDot() throws InterruptedException {
+	public void testValidateCnpjWithoutDot() throws InterruptedException {
 		
-		Thread.sleep(9000);
+		WebElement btcheckNo = getDriver().findElement(By.id("pontuacao_nao")); 
+		btcheckNo.click();
 		
-		WebElement btcheck = driver.findElement(By.id("pontuacao_nao")); 
-		btcheck.click();
-		
-		WebElement btnGerar = driver.findElement(By.id("bt_gerar_cnpj"));
+		WebElement btnGerar = getDriver().findElement(By.id("bt_gerar_cnpj"));
 		btnGerar.click();
 		
-		Thread.sleep(1000);
-		WebElement tfGerado = driver.findElement(By.id("texto_cnpj"));
+		Thread.sleep(2000);
+		WebElement tfGerado = getDriver().findElement(By.id("texto_cnpj"));
 		
 		String cnpjGerado = tfGerado.getText();
 		
